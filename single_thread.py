@@ -7,11 +7,11 @@ def get_csv(filename):
 		book_list = []
 		readcsv = csv.reader(csvfile, delimiter = ',')
 		for row in readcsv:
-			book_list.append(row[1])
+			book_list.append(row[0])
 		return book_list
 
 # Put into List
-book_list = get_csv('BOOK.csv')
+book_list = get_csv('Book30.csv')
 
 # Serialized
 keyword = input("Search books via keyword: ")
@@ -58,10 +58,12 @@ for i in range(0, num_threads):
 	end_offset += scope
 
 threads_start_time = time.time()
+threads_end_time = time.time()
 for i in threads:
+	threads_start_time = time.time()
 	i.start()
 	i.join()
-threads_end_time = time.time()
+	threads_end_time = time.time()
 print("Parallelized time: " + str(threads_end_time - threads_start_time))
 
 
