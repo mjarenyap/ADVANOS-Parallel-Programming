@@ -27,54 +27,45 @@ serial_end_time = time.time()
 print("Serialized Time: " + str(serial_end_time - serial_start_time))
 print("--------------------------------------------------")
 
-#Two threads
-def find_book(start_index, end_index, keyword, book_list):
+################## single thread vs. multi-thread ##################
+
+#multi-threads
+def find_book(tnum, start_index, end_index, keyword, book_list):
 	i = start_index
 	ctr = 0
+	t_start_time = time.time()
 	while i < end_index:
 		if keyword.lower() in book_list[i].lower():
-			#print(book_list[i])
 			ctr += 1
 		i += 1
-	print("Total books found:" + str(ctr))
+	t_end_time = time.time()
+	print("[Thread", tnum,"] Total books found:" + str(ctr))
 	return
 
-# User inputs how many threads
+#User inputs how many threads
 num_threads = int(input("Number of threads: "))
 scope = int(len(book_list) / num_threads)
 start_offset = 0
 end_offset = scope - 1
 threads = []
+
+threads_start_time = time.time()
 for i in range(0, num_threads):
 	if(i != num_threads - 1):
-		t = threading.Thread(target = find_book, args = (start_offset, end_offset, keyword, book_list))
+		t = threading.Thread(target = find_book, args = (i, start_offset, end_offset, keyword, book_list))
 		threads.append(t)
+		t.start()
+		t.join()
 
 	else:
-		t = threading.Thread(target = find_book, args = (start_offset, len(book_list), keyword, book_list))
+		t = threading.Thread(target = find_book, args = (i, start_offset, len(book_list), keyword, book_list))
 		threads.append(t)
+		t.start()
+		t.join()
 
 	start_offset += scope
 	end_offset += scope
 
-threads_start_time = time.time()
-for i in threads:
-	i.start()
-	#i.join()
-
 threads_end_time = time.time()
 print("Parallelized time: " + str(threads_end_time - threads_start_time))
-
-
-"""
-t1 = threading.Thread(target = find_book, args = (0, len(book_list)//2, keyword, book_list))
-t2 = threading.Thread(target = find_book, args = ((len(book_list)//2) + 1, len(book_list), keyword, book_list))
-threads_start_time = time.time()
-t1.start()
-t2.start()
-t1.join()
-t2.join()
-threads_end_time = time.time()
-print("Parallelized time: " + str(threads_end_time - threads_start_time))
-"""
 
