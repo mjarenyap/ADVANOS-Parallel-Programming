@@ -42,7 +42,7 @@ def find_book(tnum, start_index, end_index, keyword, book_list):
 	print("[Thread", tnum,"] Total books found:" + str(ctr))
 	return
 
-#User inputs how many threads
+# User inputs how many threads
 num_threads = int(input("Number of threads: "))
 scope = int(len(book_list) / num_threads)
 start_offset = 0
