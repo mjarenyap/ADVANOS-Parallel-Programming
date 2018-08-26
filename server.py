@@ -22,7 +22,7 @@ class Searcher(object):
 	@Pyro4.expose
 	def end_index(self):
 		return self._end_index
-	
+		
 	@Pyro4.expose
 	def book_list(self):
 		return self._book_list
@@ -34,7 +34,6 @@ class Searcher(object):
 	@Pyro4.expose
 	def report(self, time_execution, total):
 		print("[" + self._name + "] just finised! (" + str(total) + " found in " + str(time_execution) + "s)")
-	
 
 def get_csv(filename):
 	with open(filename, encoding='utf-8') as csvfile:
