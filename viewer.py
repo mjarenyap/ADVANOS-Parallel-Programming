@@ -27,15 +27,18 @@ def find_searchers():
 	return s
 
 def main():
-	# uri = input("Enter URI: ")
-	# searcher = Pyro4.Proxy(uri).strip()
-	# id_num = int(input("Enter id: "))
+	slowest = 0
+	slowest_system = None
 	searchers = find_searchers()
 	for i in searchers:
 		r = find_book(i.start_index(), i.end_index(), i.keyword(), i.book_list())
 		print(i.name() + " | Time: " + str(r[0]) + " | Total: " + str(r[1]))
 		i.report(r[0], r[1])
-	# r = find_book(searcher.start_index(), searcher.end_index(), searcher.keyword(), searcher.book_list())
-	# searcher.report(r[0], r[1])
+
+		if r[0] > slowest:
+			slowest = r[0]
+			slowest_system = i
+
+	searchers[0].report_slowest(slowest, slowest_system)
 
 main()

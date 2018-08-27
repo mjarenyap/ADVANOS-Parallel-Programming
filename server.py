@@ -35,6 +35,9 @@ class Searcher(object):
 	def report(self, time_execution, total):
 		print("[" + self._name + "] just finised! (" + str(total) + " found in " + str(time_execution) + "s)")
 
+	def report_slowest(self, slowest, slowest_system):
+		print("\n" + slowest_system.name() + " slowest | " + str(slowest) + "s")
+
 def get_csv(filename):
 	with open(filename, encoding='utf-8') as csvfile:
 		book_list = []
@@ -46,6 +49,7 @@ def get_csv(filename):
 
 # main program
 def main():
+	Pyro4.config.THREADPOOL_SIZE = 201
 	book_list = get_csv('BOOK200.csv') # data setup
 	keyword = input("Search books via keyword: ") # keyword input
 
