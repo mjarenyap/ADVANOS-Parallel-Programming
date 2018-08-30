@@ -32,8 +32,8 @@ class Searcher(object):
 		return self._keyword
 
 	@Pyro4.expose
-	def report(self, time_execution, total):
-		print("[" + self._name + "] just finised! (" + str(total) + " found in " + str(time_execution) + "s)")
+	def report(self, time_execution, total, task_time):
+		print("[" + self._name + "] just finised! (" + str(total) + " found in " + str(task_time) + "s). Overall: " + str(time_execution))
 
 	def report_slowest(self, slowest, slowest_system):
 		print("\n" + slowest_system.name() + " slowest | " + str(slowest) + "s")
@@ -69,12 +69,13 @@ def main():
 		start_offset += scope
 		end_offset += scope
 
-	with Pyro4.Daemon() as daemon:
+	with Pyro4.Daemon(host = '172.20.10.3', port = 9091) as daemon:
 		for i in searchers:
 			uri = daemon.register(i)
+			# host = '172.20.10.3', port = 9090
 			with Pyro4.locateNS() as ns:
 				ns.register("library." + i.name(), uri)
-				# print("PYRO:library." + i.name() + "@localhost:" + str(uri.port))
+				print("PYRO:library." + i.name() + "@172.20.10.3:" + str(uri.port))
 
 		daemon.requestLoop()
 

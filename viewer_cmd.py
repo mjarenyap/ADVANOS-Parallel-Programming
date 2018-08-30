@@ -2,10 +2,10 @@ import csv
 import time
 import Pyro4
 
-def find_book(start_index, end_index, keyword, book_list):
+def find_book(start_index, end_index, keyword, book_list, t_start_time):
 	i = start_index
 	ctr = 0
-	t_start_time = time.time()
+	n_start_time = time.time()
 	while i < end_index:
 		if keyword.lower() in book_list[i].lower():
 			ctr += 1
@@ -13,7 +13,7 @@ def find_book(start_index, end_index, keyword, book_list):
 	t_end_time = time.time()
 
 	# return time result and number of books found
-	return round(t_end_time - t_start_time, 7), ctr
+	return round(t_end_time - t_start_time, 7), ctr, round(t_end_time - n_start_time, 7)
 
 def find_searchers(num):
 	s = None
@@ -32,9 +32,10 @@ def find_searchers(num):
 
 def main():
 	num = int(input("nth System: "))
+	t_start_time = time.time()
 	searcher = find_searchers(num)
-	r = find_book(searcher.start_index(), searcher.end_index(), searcher.keyword(), searcher.book_list())
-	searcher.report(r[0], r[1])
-	print(searcher.name() + " | Time: " + str(r[0]) + " | Total: " + str(r[1]))
+	r = find_book(searcher.start_index(), searcher.end_index(), searcher.keyword(), searcher.book_list(), t_start_time)
+	searcher.report(r[0], r[1], r[2])
+	print(searcher.name() + " | Total Time: " + str(r[0]) + " | Total: " + str(r[1]) + " | Task Time: " + str(r[2]))
 
 main()
